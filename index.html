@@ -1,11 +1,80 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teste de Estoque</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 520px; margin: 40px auto; padding: 0 16px; }
+    form { display: grid; gap: 10px; }
+    input, button { padding: 10px; font-size: 16px; }
+    #mensagem { min-height: 24px; font-weight: bold; }
+    .sucesso { color: #15803d; }
+    .erro { color: #b91c1c; }
+    li { margin: 8px 0; }
+    li span { margin-left: 10px; color: #555; }
+  </style>
 </head>
 <body>
-    
+  <h1>se pa é um gerenciador kkkkkkkkkkkkkkkkk</h1>
+
+  <form id="form-item">
+    <input id="nome" type="text" placeholder="Nome do item" required>
+    <input id="id-item" type="text" placeholder="ID do item" required>
+    <button type="submit">Adicionar item</button>
+  </form>
+
+  <p id="mensagem" aria-live="polite"></p>
+  <h2>Itens cadastrados</h2>
+  <ul id="lista-itens"></ul>
+
+  <script>
+    const formulario = document.querySelector('#form-item');
+    const campoNome = document.querySelector('#nome');
+    const campoId = document.querySelector('#id-item');
+    const listaItens = document.querySelector('#lista-itens');
+    const mensagem = document.querySelector('#mensagem');
+    const itens = [];
+
+    function mostrarMensagem(texto, tipo) {
+      mensagem.textContent = texto;
+      mensagem.className = tipo;
+    }
+
+    function renderizarItens() {
+      listaItens.innerHTML = '';
+      itens.forEach((item) => {
+        const linha = document.createElement('li');
+        const nome = document.createElement('strong');
+        const id = document.createElement('span');
+        nome.textContent = item.nome;
+        id.textContent = `ID: ${item.id}`;
+        linha.append(nome, id);
+        listaItens.appendChild(linha);
+      });
+    }
+
+    formulario.addEventListener('submit', (evento) => {
+      evento.preventDefault();
+      const nome = campoNome.value.trim();
+      const id = campoId.value.trim();
+
+      if (!nome || !id) {
+        mostrarMensagem('Preencha o nome e o ID.', 'erro');
+        return;
+      }
+
+      const idJaExiste = itens.some((item) => item.id === id);
+      if (idJaExiste) {
+        mostrarMensagem('Este ID já está cadastrado. Escolha outro.', 'erro');
+        return;
+      }
+
+      itens.push({ nome, id });
+      renderizarItens();
+      mostrarMensagem('Item adicionado com sucesso!', 'sucesso');
+      formulario.reset();
+      campoNome.focus();
+    });
+  </script>
 </body>
-</html>

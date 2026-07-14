@@ -34,13 +34,18 @@ function renderizarItens() {
 }
 
 // O evento submit acontece quando o botão do formulário é clicado.
-formulario.addEventListener('submit', (evento) => {
+formulario.addEventListener('submit', (evento) => {{
+  if (!nome || !id)
   // Impede a página de recarregar, que é o comportamento padrão de um formulário.
   evento.preventDefault();
 
   // trim() remove espaços antes e depois do texto digitado.
   const nome = campoNome.value.trim();
   const id = campoId.value.trim();
+  if (!/^\d+$/.test(id)) {
+    mostrarMensagem('somente numeros aqui');
+    return
+  }
 
   // Verifica se já existe algum item com o mesmo ID.
   const idJaExiste = itens.some((item) => item.id === id);
@@ -58,4 +63,5 @@ formulario.addEventListener('submit', (evento) => {
   // Limpa os campos e devolve o foco ao primeiro campo.
   formulario.reset();
   campoNome.focus();
-});
+}});
+//
